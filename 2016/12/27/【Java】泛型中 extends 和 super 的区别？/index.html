@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【java】泛型中 extends 和 super 的区别？ | iTimeTraveler</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="extends,super" />
+  
+  
+  
+  
+  <meta name="description" content="&amp;lt;? extends T&amp;gt;和&amp;lt;? super T&amp;gt;是Java泛型中的“通配符（Wildcards）”和“边界（Bounds）”的概念。
+
+&amp;lt;? extends T&amp;gt;：是指 “上界通配符（Upper Bounds Wildcards）”
+&amp;lt;? super T&amp;gt;：是指 “下界通配符（Lower Bounds Wildcards）”
+
+为什么要用通配符和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】泛型中 extends 和 super 的区别？">
+<meta property="og:url" content="http://github.com/2016/12/27/【Java】泛型中 extends 和 super 的区别？/index.html">
+<meta property="og:site_name" content="iTimeTraveler">
+<meta property="og:description" content="&amp;lt;? extends T&amp;gt;和&amp;lt;? super T&amp;gt;是Java泛型中的“通配符（Wildcards）”和“边界（Bounds）”的概念。
+
+&amp;lt;? extends T&amp;gt;：是指 “上界通配符（Upper Bounds Wildcards）”
+&amp;lt;? super T&amp;gt;：是指 “下界通配符（Lower Bounds Wildcards）”
+
+为什么要用通配符和">
+<meta property="og:image" content="http://github.com/gallery/learn-java.png">
+<meta property="og:updated_time" content="2017-06-16T10:27:21.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Java】泛型中 extends 和 super 的区别？">
+<meta name="twitter:description" content="&amp;lt;? extends T&amp;gt;和&amp;lt;? super T&amp;gt;是Java泛型中的“通配符（Wildcards）”和“边界（Bounds）”的概念。
+
+&amp;lt;? extends T&amp;gt;：是指 “上界通配符（Upper Bounds Wildcards）”
+&amp;lt;? super T&amp;gt;：是指 “下界通配符（Lower Bounds Wildcards）”
+
+为什么要用通配符和">
+<meta name="twitter:image" content="http://github.com/gallery/learn-java.png">
+  
+    <link rel="alternate" href="/atom.xml" title="iTimeTraveler" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="http://tvax2.sinaimg.cn/crop.0.0.440.440.180/5c78db24ly8fga78ly31oj20c80c874e.jpg">
+  <link rel="apple-touch-icon" href="/http://tvax2.sinaimg.cn/crop.0.0.440.440.180/5c78db24ly8fga78ly31oj20c80c874e.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="http://tvax2.sinaimg.cn/crop.0.0.440.440.180/5c78db24ly8fga78ly31oj20c80c874e.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../funnysite">酷站</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../mybooks">readlist</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../collection">收藏</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-【Java】泛型中 extends 和 super 的区别？" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="../../../../gallery/learn-java.png" rel="gallery_cj5hk5m1x006khcmy12aa0fw1">
+        <img src="../../../../gallery/learn-java.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      【Java】泛型中 extends 和 super 的区别？
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2016-12-27T06:46:00.000Z" itemprop="datePublished">2016-12-27</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/Java/">Java</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/gallery/java-genericity/example.png" alt=""></p>
+<p><code>&lt;? extends T&gt;</code>和<code>&lt;? super T&gt;</code>是Java泛型中的<strong>“通配符（Wildcards）”</strong>和<strong>“边界（Bounds）”</strong>的概念。</p>
+<ul>
+<li><code>&lt;? extends T&gt;</code>：是指 <strong>“上界通配符（Upper Bounds Wildcards）”</strong></li>
+<li><code>&lt;? super T&gt;</code>：是指 <strong>“下界通配符（Lower Bounds Wildcards）”</strong></li>
+</ul>
+<h2 id="为什么要用通配符和边界？"><a href="#为什么要用通配符和边界？" class="headerlink" title="为什么要用通配符和边界？"></a><strong>为什么要用通配符和边界？</strong></h2><p>使用泛型的过程中，经常出现一种很别扭的情况。比如按照题主的例子，我们有Fruit类，和它的派生类Apple类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> </span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>然后有一个最简单的容器：Plate类。盘子里可以放一个泛型的“东西”。我们可以对这个东西做最简单的“放”和“取”的动作：<code>set( )</code>和<code>get( )</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Plate</span>&lt;<span class="title">T</span>&gt;</span>&#123;</div><div class="line">    <span class="keyword">private</span> T item;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Plate</span><span class="params">(T t)</span></span>&#123;item=t;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T t)</span></span>&#123;item=t;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> item;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>现在我定义一个“水果盘子”，逻辑上水果盘子当然可以装苹果。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;Fruit&gt; p=<span class="keyword">new</span> Plate&lt;Apple&gt;(<span class="keyword">new</span> Apple());</div></pre></td></tr></table></figure>
+<p>但实际上Java编译器不允许这个操作。会报错，“装苹果的盘子”无法转换成“装水果的盘子”。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">error: incompatible types: Plate&lt;Apple&gt; cannot be converted to Plate&lt;Fruit&gt;</div></pre></td></tr></table></figure>
+<p>所以我的尴尬症就犯了。实际上，编译器脑袋里认定的逻辑是这样的：</p>
+<ul>
+<li>苹果 IS-A 水果</li>
+<li>装苹果的盘子 NOT-IS-A 装水果的盘子</li>
+</ul>
+<p>所以，就算容器里装的东西之间有继承关系，但容器之间是没有继承关系的。所以我们不可以把Plate的引用传递给Plate。</p>
+<p>为了让泛型用起来更舒服，Sun的大脑袋们就想出了<code>&lt;? extends T&gt;</code>和<code>&lt;? super T&gt;</code>的办法，来让“水果盘子”和“苹果盘子”之间发生关系。</p>
+<h2 id="什么是上界？"><a href="#什么是上界？" class="headerlink" title="什么是上界？"></a><strong>什么是上界？</strong></h2><p>下面代码就是“上界通配符（Upper Bounds Wildcards）”：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;？ extends Fruit&gt;</div></pre></td></tr></table></figure>
+<p>翻译成人话就是：一个能放水果以及一切是水果派生类的盘子。再直白点就是：啥水果都能放的盘子。这和我们人类的逻辑就比较接近了。<code>Plate&lt;？ extends Fruit&gt;</code>和<code>Plate&lt;Apple&gt;</code>最大的区别就是：<code>Plate&lt;？ extends Fruit&gt;</code>是<code>Plate&lt;Fruit&gt;</code>以及<code>Plate&lt;Apple&gt;</code>的基类。直接的好处就是，我们可以用“苹果盘子”给“水果盘子”赋值了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;? extends Fruit&gt; p=<span class="keyword">new</span> Plate&lt;Apple&gt;(<span class="keyword">new</span> Apple());</div></pre></td></tr></table></figure>
+<p>如果把Fruit和Apple的例子再扩展一下，食物分成水果和肉类，水果有苹果和香蕉，肉类有猪肉和牛肉，苹果还有两种青苹果和红苹果。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//Lev 1</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Food</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="comment">//Lev 2</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> <span class="keyword">extends</span> <span class="title">Food</span></span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meat</span> <span class="keyword">extends</span> <span class="title">Food</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="comment">//Lev 3</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">Fruit</span></span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Banana</span> <span class="keyword">extends</span> <span class="title">Fruit</span></span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pork</span> <span class="keyword">extends</span> <span class="title">Meat</span></span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Beef</span> <span class="keyword">extends</span> <span class="title">Meat</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="comment">//Lev 4</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedApple</span> <span class="keyword">extends</span> <span class="title">Apple</span></span>&#123;&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreenApple</span> <span class="keyword">extends</span> <span class="title">Apple</span></span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>在这个体系中，下界通配符 <code>Plate&lt;？ extends Fruit&gt;</code> 覆盖下图中蓝色的区域。</p>
+<p><img src="/gallery/java-genericity/lowerBounds.png" alt=""></p>
+<h2 id="什么是下界？"><a href="#什么是下界？" class="headerlink" title="什么是下界？"></a><strong>什么是下界？</strong></h2><p>相对应的，“下界通配符（Lower Bounds Wildcards）”：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;？ <span class="keyword">super</span> Fruit&gt;</div></pre></td></tr></table></figure>
+<p>表达的就是相反的概念：一个能放水果以及一切是水果基类的盘子。<code>Plate&lt;？ super Fruit&gt;</code>是<code>Plate&lt;Fruit&gt;</code>的基类，但不是<code>Plate&lt;Apple&gt;</code>的基类。对应刚才那个例子，<code>Plate&lt;？ super Fruit&gt;</code>覆盖下图中红色的区域。</p>
+<p><img src="/gallery/java-genericity/upperBounds.png" alt=""></p>
+<h2 id="上下界通配符的副作用"><a href="#上下界通配符的副作用" class="headerlink" title="上下界通配符的副作用"></a><strong>上下界通配符的副作用</strong></h2><p>边界让Java不同泛型之间的转换更容易了。但不要忘记，这样的转换也有一定的副作用。那就是容器的部分功能可能失效。</p>
+<p>还是以刚才的Plate为例。我们可以对盘子做两件事，往盘子里set()新东西，以及从盘子里get()东西。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Plate</span>&lt;<span class="title">T</span>&gt;</span>&#123;</div><div class="line">    <span class="keyword">private</span> T item;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Plate</span><span class="params">(T t)</span></span>&#123;item=t;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T t)</span></span>&#123;item=t;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> item;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="上界-lt-extends-T-gt-不能往里存，只能往外取"><a href="#上界-lt-extends-T-gt-不能往里存，只能往外取" class="headerlink" title="上界&lt;? extends T&gt;不能往里存，只能往外取"></a>上界<code>&lt;? extends T&gt;</code>不能往里存，只能往外取</h3><p><code>&lt;? extends Fruit&gt;</code>会使往盘子里放东西的<code>set( )</code>方法失效。但取东西<code>get( )</code>方法还有效。比如下面例子里两个set()方法，插入Apple和Fruit都报错。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;? extends Fruit&gt; p=<span class="keyword">new</span> Plate&lt;Apple&gt;(<span class="keyword">new</span> Apple());</div><div class="line">	</div><div class="line"><span class="comment">//不能存入任何元素</span></div><div class="line">p.set(<span class="keyword">new</span> Fruit());    <span class="comment">//Error</span></div><div class="line">p.set(<span class="keyword">new</span> Apple());    <span class="comment">//Error</span></div><div class="line"></div><div class="line"><span class="comment">//读取出来的东西只能存放在Fruit或它的基类里。</span></div><div class="line">Fruit newFruit1=p.get();</div><div class="line">Object newFruit2=p.get();</div><div class="line">Apple newFruit3=p.get();    <span class="comment">//Error</span></div></pre></td></tr></table></figure>
+<p>原因是编译器只知道容器内是Fruit或者它的派生类，但具体是什么类型不知道。可能是Fruit？可能是Apple？也可能是Banana，RedApple，GreenApple？编译器在看到后面用Plate赋值以后，盘子里没有被标上有“苹果”。而是标上一个占位符：CAP#1，来表示捕获一个Fruit或Fruit的子类，具体是什么类不知道，代号CAP#1。然后无论是想往里插入Apple或者Meat或者Fruit编译器都不知道能不能和这个CAP#1匹配，所以就都不允许。</p>
+<p>所以通配符<code>&lt;?&gt;</code>和类型参数的区别就在于，对编译器来说所有的T都代表同一种类型。比如下面这个泛型方法里，三个T都指代同一个类型，要么都是String，要么都是Integer。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">fill</span><span class="params">(T... t)</span></span>;</div></pre></td></tr></table></figure>
+<p>但通配符<code>&lt;?&gt;</code>没有这种约束，<code>Plate&lt;?&gt;</code>单纯的就表示：盘子里放了一个东西，是什么我不知道。</p>
+<p>所以题主问题里的错误就在这里，<code>Plate&lt;？ extends Fruit&gt;</code>里什么都放不进去。</p>
+<h3 id="下界-lt-super-T-gt-不影响往里存，但往外取只能放在Object对象里"><a href="#下界-lt-super-T-gt-不影响往里存，但往外取只能放在Object对象里" class="headerlink" title="下界&lt;? super T&gt;不影响往里存，但往外取只能放在Object对象里"></a>下界<code>&lt;? super T&gt;</code>不影响往里存，但往外取只能放在Object对象里</h3><p>使用下界<code>&lt;? super Fruit&gt;</code>会使从盘子里取东西的get( )方法部分失效，只能存放到Object对象里。set( )方法正常。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Plate&lt;? <span class="keyword">super</span> Fruit&gt; p=<span class="keyword">new</span> Plate&lt;Fruit&gt;(<span class="keyword">new</span> Fruit());</div><div class="line"></div><div class="line"><span class="comment">//存入元素正常</span></div><div class="line">p.set(<span class="keyword">new</span> Fruit());</div><div class="line">p.set(<span class="keyword">new</span> Apple());</div><div class="line"></div><div class="line"><span class="comment">//读取出来的东西只能存放在Object类里。</span></div><div class="line">Apple newFruit3=p.get();    <span class="comment">//Error</span></div><div class="line">Fruit newFruit1=p.get();    <span class="comment">//Error</span></div><div class="line">Object newFruit2=p.get();</div></pre></td></tr></table></figure>
+<p>因为下界规定了元素的最小粒度的下限，实际上是放松了容器元素的类型控制。既然元素是Fruit的基类，那往里存粒度比Fruit小的都可以。但往外读取元素就费劲了，只有所有类的基类Object对象才能装下。但这样的话，元素的类型信息就全部丢失。</p>
+<h2 id="PECS原则"><a href="#PECS原则" class="headerlink" title="PECS原则"></a><strong>PECS原则</strong></h2><p>最后看一下什么是PECS（Producer Extends Consumer Super）原则，已经很好理解了：</p>
+<ul>
+<li><strong>频繁往外读取内容的，适合用上界Extends。</strong></li>
+<li><strong>经常往里插入的，适合用下界Super。</strong></li>
+</ul>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="http://www.ciaoshen.com/2016/08/21/superExtends/" target="_blank" rel="external">Java泛型中extends和super的区别？</a></li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: '打赏支持', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/iTimeTraveler/iTimeTraveler.github.io/site/source/about/donate/images/WeChanQR.png',
+  alipayImage: 'https://raw.githubusercontent.com/iTimeTraveler/iTimeTraveler.github.io/site/source/about/donate/images/AliPayQR.jpg'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/Java-Generics/">Java Generics</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../../2017/01/03/【Android】TextView中不同大小字体如何上下垂直居中？/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          【Android】TextView中不同大小字体如何上下垂直居中？
+        
+      </div>
+    </a>
+  
+  
+    <a href="../【Java】泛型详解/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【Java】泛型详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用通配符和边界？"><span class="nav-number">1.</span> <span class="nav-text">为什么要用通配符和边界？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是上界？"><span class="nav-number">2.</span> <span class="nav-text">什么是上界？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是下界？"><span class="nav-number">3.</span> <span class="nav-text">什么是下界？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上下界通配符的副作用"><span class="nav-number">4.</span> <span class="nav-text">上下界通配符的副作用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上界-lt-extends-T-gt-不能往里存，只能往外取"><span class="nav-number">4.1.</span> <span class="nav-text">上界<? extends T>不能往里存，只能往外取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下界-lt-super-T-gt-不影响往里存，但往外取只能放在Object对象里"><span class="nav-number">4.2.</span> <span class="nav-text">下界<? super T>不影响往里存，但往外取只能放在Object对象里</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PECS原则"><span class="nav-number">5.</span> <span class="nav-text">PECS原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2017 iTimeTraveler All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../funnysite" class="mobile-nav-link">酷站</a>
+  
+    <a href="../../../../mybooks" class="mobile-nav-link">ReadList</a>
+  
+    <a href="../../../../collection" class="mobile-nav-link">收藏</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            iTimeTraveler
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 Mr.Seven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
